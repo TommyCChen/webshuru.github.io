@@ -33,6 +33,7 @@
 <script>
   const canvas = document.querySelector("#myCanvas");
   const ctx = canvas.getContext("2d");
+  let vertex = canvas.getBoundingClientRect();
   ctx.fillStyle = "#eee";
   ctx.fillRect(0, 0, 400, 400);
 
@@ -135,8 +136,8 @@
     e.preventDefault();
     isAagain = true;
     ctx.beginPath();
-    x = e.touches[0].pageX;
-    y = e.touches[0].pageY;
+    x = e.touches[0].clientX - vertex.left;
+    y = e.touches[0].clientY - vertex.top;
     ctx.moveTo(x, y);
     //todo 当用户触摸移动的时候，继续书写
     point.push("[");
@@ -153,17 +154,15 @@
     if (!isAagain) return;
     e.preventDefault();
     var e2 = e.touches[0];
-    ctx.lineTo(e2.pageX, e2.pageY);
+    ctx.lineTo(e2.clientX - vertex.left, e2.clientY - vertex.top);
 
     // console.log("移动------", e);
     ctx.stroke();
-    x = e2.pageX;
-    y = e2.pageY;
     if (Date.now() % 3 == 0) {
       point.push("[");
-      point.push(e2.pageX);
+      point.push(e2.clientX - vertex.left);
       point.push(",");
-      point.push(e2.pageY);
+      point.push(e2.clientY - vertex.top);
       point.push("]");
       pointsXY.push(point.join(''));
       point = [];
