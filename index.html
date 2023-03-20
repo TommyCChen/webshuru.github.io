@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>canvas输入法</title>
+    <style>
+      .ul {
+        display: flex;
+        align-items: center;
+        list-style: none;
+      }
+      .ul > li {
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body style="overflow:hidden">
+    <input id="inputText" type="text" size="30"/><br>
+    <canvas type="2d" id="myCanvas" width="400" height="400"></canvas>
+    <ul class="ul">
+      <li><button id="handle">手动识别</button></li>
+      <li><button id="clearCanvas">清空</button></li>
+<!--       <li><button onclick="canvasGreen(1)">画笔变色</button></li>
+      <li><button onclick="canvasGreen(2)">画布变色</button></li>
+      <li><button onclick="canvasGreen(3)">画笔粗细</button></li> -->
+    </ul>
+    <img src="" alt="" id="Img" />
+  </body>
+</html>
+<script>
+  const canvas = document.querySelector("#myCanvas");
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#eee";
+  ctx.fillRect(0, 0, 400, 400);
+
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.strokeStyle = "red";
+  ctx.lineWidth = 3;
+
+  let isAagain = false,
+    x = 0,
+    y = 0;
+  let point = [],
+    pointsXY = [], // 单笔画
+    allPointsXY = [], // 全部笔画
+    write_result = []; // 返回相近字
+  let imgURL = null;
+
+  //todo 监听用户鼠标按下时，开始画图
+  canvas.addEventListener("mousedown", function (e) {
+    // console.log(e);
+    isAagain = true;
+    ctx.beginPath();
+    x = e.offsetX;
+    y = e.offsetY;
+    ctx.moveTo(x, y);
+    //todo 当用户在鼠标按下，移动的时候，继续画图
+    point.push("[");
+    point.push(x);
+    point.push(",");
+    point.push(y);
+    point.push("]");
+    pointsXY.push(point.join(''));
+    point = [];
+    canvas.addEventListener("mousemove", move);
+  });
+  //具体事件
+  function move(e) {
+    if (!isAagain) return;
+
+    ctx.lineTo(e.offsetX, e.offsetY);
+
+    // console.log("移动------", e);
+    ctx.stroke();
+    if (Date.now() % 3 == 0) {
+      point.push("[");
+      point.push(e.offsetX);
+      point.push(",");
+      point.push(e.offsetY);
+      point.push("]");
+      pointsXY.push(point.join(''));
+      point = [];
+    }
+  }
+
+  //当用户鼠标抬起的时候，取消监听画图
+  canvas.addEventListener("mouseup", function () {
+    canvas.removeEventListener("mousemove", move);
+    if (isAagain) {
+      document.getElementById('inputText').value += "好";
+      pointsXY.push('[-1,0]');
+      allPointsXY.push(pointsXY.join(','));
+      pointsXY = [];
+      console.table(allPointsXY);
+    }
+    imgURL = canvas.toDataURL();
+    isAagain = false;
+    setTimeout (function() {
+
+    }, 1000);
+    setTimeout (function() {
+      if (canvas.toDataURL() == imgURL) {
+        if (isAagain || isCanvasBlank(canvas)) return;
+        ctx.fillRect(0, 0, 400, 400);    
+        document.getElementById('inputText').value = null;
+        allPointsXY = [];
+      }
+
+       
+    }, 1000);
+  });
+  //当鼠标移出canvas画布之外，也停止监听，否则会有bug,不行的话，可以把这个方法注释试一试
+  canvas.addEventListener("mouseout", function () {
+    canvas.removeEventListener("mousemove", move);
+    if (isAagain) {
+      document.getElementById('inputText').value += "好";
+      pointsXY.push('[-1,0]');
+      allPointsXY.push(pointsXY.join(','));
+      pointsXY = [];
+      console.table(allPointsXY);
+    }
+    isAagain = false;
+    setTimeout (function() {
+      if (isAagain) return;
+      ctx.fillRect(0, 0, 400, 400);    
+      document.getElementById('inputText').value = null;
+      allPointsXY = [];
+      
+    }, 2000);
+  });
+
+  //todo 监听用户触摸时，开始书写
+  canvas.addEventListener("touchstart", function (e) {
+    // console.log(e);
+    e.preventDefault();
+    isAagain = true;
+    ctx.beginPath();
+    x = e.touches[0].offsetX;
+    y = e.touches[0].offsetY;
+    ctx.moveTo(x, y);
+    //todo 当用户触摸移动的时候，继续书写
+    point.push("[");
+    point.push(x);
+    point.push(",");
+    point.push(y);
+    point.push("]");
+    pointsXY.push(point.join(''));
+    point = [];
+    canvas.addEventListener("touchmove", touchmove);
+  });
+  //具体事件
+  function touchmove(e) {
+    if (!isAagain) return;
+    e.preventDefault();
+    var e2 = e.touches[0];
+    ctx.lineTo(e2.offsetX, e2.offsetY);
+
+    // console.log("移动------", e);
+    ctx.stroke();
+    if (Date.now() % 3 == 0) {
+      point.push("[");
+      point.push(e2.offsetX);
+      point.push(",");
+      point.push(e2.offsetY);
+      point.push("]");
+      pointsXY.push(point.join(''));
+      point = [];
+    }
+  }
+
+  //当用户抬起的时候，取消监听画图
+  canvas.addEventListener("touchend", function () {
+    canvas.removeEventListener("touchmove", touchmove);
+    if (isAagain) {
+      document.getElementById('inputText').value += "好";
+      pointsXY.push('[-1,0]');
+      allPointsXY.push(pointsXY.join(','));
+      pointsXY = [];
+      console.table(allPointsXY);
+    }
+    isAagain = false;
+  });
+  //当鼠标移出canvas画布之外，也停止监听，否则会有bug,不行的话，可以把这个方法注释试一试
+  // canvas.addEventListener("mouseout", function () {
+  //   canvas.removeEventListener("mousemove", move);
+  //   if (isAagain) {
+  //     document.getElementById('inputText').value += "好";
+  //     pointsXY.push('[-1,0]');
+  //     allPointsXY.push(pointsXY.join(','));
+  //     pointsXY = [];
+  //     console.table(allPointsXY);
+  //   }
+  //   isAagain = false;
+  // });
+
+  // 清除画布
+  clearCanvas.onclick = function () {
+    console.log("清除画布");
+    ctx.fillRect(0, 0, 400, 400); //相当于重新生成了一个矩形
+    document.getElementById('inputText').value = null;
+    allPointsXY = [];
+  };
+
+  function isCanvasBlank(cvs) {
+    var blank = document.createElement('canvas');
+    blank.width = cvs.width;
+    blank.height = cvs.height;
+    return cvs.toDataURL() == blank.toDataURL();
+  }
+
+  // 生成图片
+  // createImg1.onclick = function () {
+  //   const img = new Image();
+  //   //图片的格式jpeg,图片的质量为0.8
+  //   img.src = canvas.toDataURL("image/jpeg", 0.8);
+  //   img.onload = function () {
+  //     console.log("img", img);
+  //     Img.src = img.src; //这个格式是base64 的格式，上传文件需要转Blob格式
+  //   };
+  //   img.onerror = function () {
+  //     console.log("图片加载失败");
+  //   };
+  // };
+  //画笔和画布的变色
+  // function canvasGreen(e) {
+  //   console.log(e);
+  //   if (e == 1) {
+  //     ctx.strokeStyle = "#" + Math.random().toString(16).slice(-6);
+  //   } else if (e == 2) {
+  //     ctx.fillStyle = "#" + Math.random().toString(16).slice(-6);
+  //     ctx.fillRect(0, 0, 500, 500);
+  //   } else {
+  //     ctx.lineWidth = Math.random() * 10;
+  //   }
+  // }
+</script>
