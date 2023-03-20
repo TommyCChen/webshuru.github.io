@@ -18,7 +18,7 @@
   </head>
   <body style="overflow:hidden">
     <input id="inputText" type="text" size="30"/><br>
-    <canvas type="2d" id="myCanvas" width="400" height="400"></canvas>
+    <canvas type="2d" id="myCanvas" width="350" height="350"></canvas>
     <ul class="ul">
       <li><button id="handle">手动识别</button></li>
       <li><button id="clearCanvas">清空</button></li>
@@ -135,7 +135,7 @@
   //todo 监听用户触摸时，开始书写
   canvas.addEventListener("touchstart", function (e) {
     // console.log(e);
-    e.preventDefault();
+//     e.preventDefault();
     isAagain = true;
     ctx.beginPath();
     x = e.touches[0].offsetX;
@@ -154,7 +154,7 @@
   //具体事件
   function touchmove(e) {
     if (!isAagain) return;
-    e.preventDefault();
+//     e.preventDefault();
     var e2 = e.touches[0];
     ctx.lineTo(e2.offsetX, e2.offsetY);
 
