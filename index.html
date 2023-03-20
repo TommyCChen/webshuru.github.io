@@ -100,9 +100,6 @@
     imgURL = canvas.toDataURL();
     isAagain = false;
     setTimeout (function() {
-
-    }, 1000);
-    setTimeout (function() {
       if (canvas.toDataURL() == imgURL) {
         if (isAagain || isCanvasBlank(canvas)) return;
         ctx.fillRect(0, 0, 400, 400);    
@@ -110,10 +107,9 @@
         allPointsXY = [];
       }
 
-       
-    }, 1000);
+    }, 2000);
   });
-  //当鼠标移出canvas画布之外，也停止监听，否则会有bug,不行的话，可以把这个方法注释试一试
+  //当鼠标移出canvas画布之外，也停止监听
   canvas.addEventListener("mouseout", function () {
     canvas.removeEventListener("mousemove", move);
     if (isAagain) {
@@ -136,11 +132,11 @@
   //todo 监听用户触摸时，开始书写
   canvas.addEventListener("touchstart", function (e) {
     // console.log(e);
-//     e.preventDefault();
+    e.preventDefault();
     isAagain = true;
     ctx.beginPath();
-    x = e.touches[0].offsetX;
-    y = e.touches[0].offsetY;
+    x = e.touches[0].clientX;
+    y = e.touches[0].clientY;
     ctx.moveTo(x, y);
     //todo 当用户触摸移动的时候，继续书写
     point.push("[");
@@ -155,17 +151,17 @@
   //具体事件
   function touchmove(e) {
     if (!isAagain) return;
-//     e.preventDefault();
+    e.preventDefault();
     var e2 = e.touches[0];
-    ctx.lineTo(e2.offsetX, e2.offsetY);
+    ctx.lineTo(e2.clientX - x, e2.clientY - y);
 
     // console.log("移动------", e);
     ctx.stroke();
     if (Date.now() % 3 == 0) {
       point.push("[");
-      point.push(e2.offsetX);
+      point.push(e2.clientX);
       point.push(",");
-      point.push(e2.offsetY);
+      point.push(e2.clientY);
       point.push("]");
       pointsXY.push(point.join(''));
       point = [];
