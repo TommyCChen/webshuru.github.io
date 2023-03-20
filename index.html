@@ -136,8 +136,8 @@
     e.preventDefault();
     isAagain = true;
     ctx.beginPath();
-    x = e.touches[0].clientX - vertex.left;
-    y = e.touches[0].clientY - vertex.top;
+    x = e.touches[0].pageX - vertex.left;
+    y = e.touches[0].pageY - vertex.top;
     ctx.moveTo(x, y);
     //todo 当用户触摸移动的时候，继续书写
     point.push("[");
@@ -154,15 +154,15 @@
     if (!isAagain) return;
     e.preventDefault();
     var e2 = e.touches[0];
-    ctx.lineTo(e2.clientX - vertex.left, e2.clientY - vertex.top);
+    ctx.lineTo(e2.pageX - vertex.left, e2.pageY - vertex.top);
 
     // console.log("移动------", e);
     ctx.stroke();
     if (Date.now() % 3 == 0) {
       point.push("[");
-      point.push(e2.clientX - vertex.left);
+      point.push(e2.pageX - vertex.left);
       point.push(",");
-      point.push(e2.clientY - vertex.top);
+      point.push(e2.pageY - vertex.top);
       point.push("]");
       pointsXY.push(point.join(''));
       point = [];
