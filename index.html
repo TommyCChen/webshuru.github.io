@@ -153,7 +153,7 @@
     if (!isAagain) return;
     e.preventDefault();
     var e2 = e.touches[0];
-    ctx.lineTo(e2.pageX - x, e2.pageY - y);
+    ctx.lineTo(e2.pageX, e2.pageY);
 
     // console.log("移动------", e);
     ctx.stroke();
