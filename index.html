@@ -53,9 +53,11 @@
     allPointsXY = [], // 全部笔画
     write_result = []; // 返回相近字
   let imgURL = null;
+  var timeout = null;
 
   //todo 监听用户鼠标按下时，开始画图
   canvas.addEventListener("mousedown", function (e) {
+    clearTimeout(timeout);
     // console.log(e);
     isAagain = true;
     ctx.beginPath();
@@ -92,29 +94,11 @@
   }
 
   //当用户鼠标抬起的时候，取消监听画图
-  canvas.addEventListener("mouseup", function () {
-    canvas.removeEventListener("mousemove", move);
-    if (isAagain) {
-      document.getElementById('inputText').value += "好";
-      pointsXY.push('[-1,0]');
-      allPointsXY.push(pointsXY.join(','));
-      pointsXY = [];
-      console.table(allPointsXY);
-    }
-    imgURL = canvas.toDataURL();
-    isAagain = false;
-    setTimeout (function() {
-      if (canvas.toDataURL() == imgURL) {
-        if (isAagain || isCanvasBlank(canvas)) return;
-        ctx.fillRect(0, 0, 400, 400);    
-        document.getElementById('inputText').value = null;
-        allPointsXY = [];
-      }
-
-    }, 2000);
-  });
+  canvas.addEventListener("mouseup", up);
   //当鼠标移出canvas画布之外，也停止监听
-  canvas.addEventListener("mouseout", function () {
+  canvas.addEventListener("mouseout", up);
+
+  function up(e) {
     canvas.removeEventListener("mousemove", move);
     if (isAagain) {
       document.getElementById('inputText').value += "好";
@@ -124,18 +108,19 @@
       console.table(allPointsXY);
     }
     isAagain = false;
-    setTimeout (function() {
+    timeout = window.setTimeout (function() {
       if (isAagain) return;
       ctx.fillRect(0, 0, 400, 400);    
       document.getElementById('inputText').value = null;
       allPointsXY = [];
       
-    }, 2000);
-  });
+    }, 1500);
+  }
 
   //todo 监听用户触摸时，开始书写
   canvas.addEventListener("touchstart", function (e) {
     // console.log(e);
+    clearTimeout(timeout);
     e.preventDefault();
     isAagain = true;
     ctx.beginPath();
@@ -173,7 +158,9 @@
   }
 
   //当用户抬起的时候，取消监听画图
-  canvas.addEventListener("touchend", function () {
+  canvas.addEventListener("touchend", touchend);
+
+  function touchend(e) {
     canvas.removeEventListener("touchmove", touchmove);
     if (isAagain) {
       document.getElementById('inputText').value += "好";
@@ -183,22 +170,14 @@
       console.table(allPointsXY);
     }
     isAagain = false;
-    setTimeout (function() {
-      if (canvas.toDataURL() == imgURL) {
-        if (isAagain || isCanvasBlank(canvas)) return;
-        ctx.fillRect(0, 0, 400, 400);    
-        document.getElementById('inputText').value = null;
-        allPointsXY = [];
-      }
-    }, 2000);
-    setTimeout (function() {
+    timeout = window.setTimeout (function() {
       if (isAagain) return;
       ctx.fillRect(0, 0, 400, 400);    
       document.getElementById('inputText').value = null;
       allPointsXY = [];
       
-    }, 2000);
-  });
+    }, 1500);
+  }
   //当鼠标移出canvas画布之外，也停止监听，否则会有bug,不行的话，可以把这个方法注释试一试
   // canvas.addEventListener("mouseout", function () {
   //   canvas.removeEventListener("mousemove", move);
