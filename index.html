@@ -22,6 +22,13 @@
     <div>
       <p>候选字：</p>
     </div>
+    <ul class="ul">
+      <li><button id="candi1" onclick="candiClick(1)"></button></li>
+      <li><button id="candi2" onclick="candiClick(2)"></button></li>
+      <li><button id="candi3" onclick="candiClick(3)"></button></li>
+      <li><button id="candi4" onclick="candiClick(4)"></button></li>
+      <li><button id="candi5" onclick="candiClick(5)"></button></li>
+    </ul>
     <canvas type="2d" id="myCanvas" width="350" height="350"></canvas>
     <ul class="ul">
       <li><button id="handle">手动识别</button></li>
@@ -54,6 +61,11 @@
     write_result = []; // 返回相近字
   let imgURL = null;
   var timeout = null;
+  var candi1 = document.getElementById("candi1");
+  var candi2 = document.getElementById("candi2");
+  var candi3 = document.getElementById("candi3");
+  var candi4 = document.getElementById("candi4");
+  var candi5 = document.getElementById("candi5");
 
   //todo 监听用户鼠标按下时，开始画图
   canvas.addEventListener("mousedown", function (e) {
@@ -101,20 +113,21 @@
   function up(e) {
     canvas.removeEventListener("mousemove", move);
     if (isAagain) {
-      document.getElementById('inputText').value += "好";
+      // document.getElementById('inputText').value += "好";
       pointsXY.push('[-1,0]');
       allPointsXY.push(pointsXY.join(','));
       pointsXY = [];
       console.table(allPointsXY);
+      queryChar();
     }
     isAagain = false;
     timeout = window.setTimeout (function() {
       if (isAagain) return;
       ctx.fillRect(0, 0, 400, 400);    
-      document.getElementById('inputText').value = null;
       allPointsXY = [];
-      
-    }, 1000);
+      document.getElementById('inputText').value += candi1.innerText;
+      emptyChar();
+    }, 1500);
   }
 
   //todo 监听用户触摸时，开始书写
@@ -163,20 +176,22 @@
   function touchend(e) {
     canvas.removeEventListener("touchmove", touchmove);
     if (isAagain) {
-      document.getElementById('inputText').value += "好";
+      // document.getElementById('inputText').value += "好";
       pointsXY.push('[-1,0]');
       allPointsXY.push(pointsXY.join(','));
       pointsXY = [];
       console.table(allPointsXY);
+      queryChar();
     }
     isAagain = false;
     timeout = window.setTimeout (function() {
       if (isAagain) return;
       ctx.fillRect(0, 0, 400, 400);    
-      document.getElementById('inputText').value = null;
+      document.getElementById('inputText').value += candi1.innerText;
       allPointsXY = [];
+      emptyChar();
       
-    }, 1000);
+    }, 1500);
   }
   //当鼠标移出canvas画布之外，也停止监听，否则会有bug,不行的话，可以把这个方法注释试一试
   // canvas.addEventListener("mouseout", function () {
@@ -197,6 +212,7 @@
     ctx.fillRect(0, 0, 400, 400); //相当于重新生成了一个矩形
     document.getElementById('inputText').value = null;
     allPointsXY = [];
+    emptyChar();
   };
 
   function isCanvasBlank(cvs) {
@@ -204,6 +220,39 @@
     blank.width = cvs.width;
     blank.height = cvs.height;
     return cvs.toDataURL() == blank.toDataURL();
+  }
+
+  function queryChar() {
+    candi1.innerHTML = '测';
+    candi2.innerHTML = '试';
+    candi3.innerHTML = '结';
+    candi4.innerHTML = '果';
+    candi5.innerHTML = '中';
+  }
+
+  function emptyChar() {
+    candi1.innerHTML = '';
+    candi2.innerHTML = '';
+    candi3.innerHTML = '';
+    candi4.innerHTML = '';
+    candi5.innerHTML = '';
+  }
+
+  function candiClick(e) {
+    if (e == 1) {
+      document.getElementById('inputText').value += candi1.innerText;
+    } else if (e == 2) {
+      document.getElementById('inputText').value += candi2.innerText;
+    } else if (e == 3) {
+      document.getElementById('inputText').value += candi3.innerText;
+    } else if (e == 4) {
+      document.getElementById('inputText').value += candi4.innerText;
+    } else if (e == 5) {
+      document.getElementById('inputText').value += candi5.innerText;
+    }
+    ctx.fillRect(0, 0, 400, 400);    
+    allPointsXY = [];
+    emptyChar();
   }
 
   // 生成图片
