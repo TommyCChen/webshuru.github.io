@@ -189,7 +189,7 @@
       ctx.fillRect(0, 0, 350, 350);    
       document.getElementById('inputText').value += candi1.innerText;
       allPointsXY = [];
-//       emptyChar();
+      // emptyChar();
       
     }, 1500);
   }
@@ -245,6 +245,12 @@
 
   function candiClick(e) {
     if (isCanvasBlank(canvas)) {
+      if (candi1.innerText == '') return;
+      if (candi2.innerText == '') return;
+      if (candi3.innerText == '') return;
+      if (candi4.innerText == '') return;
+      if (candi5.innerText == '') return;
+
       var str = document.getElementById('inputText').value;
       str.slice(0, str.length - 1);
       document.getElementById('inputText').value = str.substr(0, str.length - 1);
