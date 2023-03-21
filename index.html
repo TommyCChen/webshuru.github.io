@@ -188,6 +188,13 @@
         allPointsXY = [];
       }
     }, 2000);
+    setTimeout (function() {
+      if (isAagain) return;
+      ctx.fillRect(0, 0, 400, 400);    
+      document.getElementById('inputText').value = null;
+      allPointsXY = [];
+      
+    }, 2000);
   });
   //当鼠标移出canvas画布之外，也停止监听，否则会有bug,不行的话，可以把这个方法注释试一试
   // canvas.addEventListener("mouseout", function () {
