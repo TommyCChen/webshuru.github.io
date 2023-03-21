@@ -45,7 +45,7 @@
   const ctx = canvas.getContext("2d");
   let vertex = canvas.getBoundingClientRect();
   ctx.fillStyle = "#eee";
-  ctx.fillRect(0, 0, 400, 400);
+  ctx.fillRect(0, 0, 350, 350);
 
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
@@ -122,11 +122,11 @@
     }
     isAagain = false;
     timeout = window.setTimeout (function() {
-      if (isAagain) return;
-      ctx.fillRect(0, 0, 400, 400);    
+      if (isAagain || isCanvasBlank(canvas)) return;
+      ctx.fillRect(0, 0, 350, 350);    
       allPointsXY = [];
       document.getElementById('inputText').value += candi1.innerText;
-      emptyChar();
+      // emptyChar();
     }, 1500);
   }
 
@@ -185,8 +185,8 @@
     }
     isAagain = false;
     timeout = window.setTimeout (function() {
-      if (isAagain) return;
-      ctx.fillRect(0, 0, 400, 400);    
+      if (isAagain || isCanvasBlank(canvas)) return;
+      ctx.fillRect(0, 0, 350, 350);    
       document.getElementById('inputText').value += candi1.innerText;
       allPointsXY = [];
       emptyChar();
@@ -209,7 +209,7 @@
   // 清除画布
   clearCanvas.onclick = function () {
     console.log("清除画布");
-    ctx.fillRect(0, 0, 400, 400); //相当于重新生成了一个矩形
+    ctx.fillRect(0, 0, 350, 350); //相当于重新生成了一个矩形
     document.getElementById('inputText').value = null;
     allPointsXY = [];
     emptyChar();
@@ -219,6 +219,11 @@
     var blank = document.createElement('canvas');
     blank.width = cvs.width;
     blank.height = cvs.height;
+
+    var ctx2 = blank.getContext("2d");
+    ctx2.fillStyle = "#eee";
+    ctx2.fillRect(0, 0, 350, 350);
+
     return cvs.toDataURL() == blank.toDataURL();
   }
 
@@ -239,6 +244,11 @@
   }
 
   function candiClick(e) {
+    if (isCanvasBlank(canvas)) {
+      var str = document.getElementById('inputText').value;
+      str.slice(0, str.length - 1);
+      document.getElementById('inputText').value = str.substr(0, str.length - 1);
+    }
     if (e == 1) {
       document.getElementById('inputText').value += candi1.innerText;
     } else if (e == 2) {
@@ -250,7 +260,7 @@
     } else if (e == 5) {
       document.getElementById('inputText').value += candi5.innerText;
     }
-    ctx.fillRect(0, 0, 400, 400);    
+    ctx.fillRect(0, 0, 350, 350);    
     allPointsXY = [];
     emptyChar();
   }
