@@ -70,6 +70,7 @@
   //todo 监听用户鼠标按下时，开始画图
   canvas.addEventListener("mousedown", function (e) {
     clearTimeout(timeout);
+    removeSpace();
     // console.log(e);
     isAagain = true;
     ctx.beginPath();
@@ -125,9 +126,10 @@
       if (isAagain || isCanvasBlank(canvas)) return;
       ctx.fillRect(0, 0, 350, 350);    
       allPointsXY = [];
+      document.getElementById('inputText').value += " ";
       document.getElementById('inputText').value += candi1.innerText;
       // emptyChar();
-    }, 1000);
+    }, 1500);
   }
 
   //todo 监听用户触摸时，开始书写
@@ -135,6 +137,7 @@
     // console.log(e);
     clearTimeout(timeout);
     e.preventDefault();
+    removeSpace();
     isAagain = true;
     ctx.beginPath();
     x = e.touches[0].pageX - vertex.left;
@@ -186,12 +189,13 @@
     isAagain = false;
     timeout = window.setTimeout (function() {
       if (isAagain || isCanvasBlank(canvas)) return;
-      ctx.fillRect(0, 0, 350, 350);    
+      ctx.fillRect(0, 0, 350, 350);
+      document.getElementById('inputText').value += " ";    
       document.getElementById('inputText').value += candi1.innerText;
       allPointsXY = [];
       // emptyChar();
       
-    }, 1000);
+    }, 1500);
   }
   //当鼠标移出canvas画布之外，也停止监听，否则会有bug,不行的话，可以把这个方法注释试一试
   // canvas.addEventListener("mouseout", function () {
@@ -214,6 +218,11 @@
     allPointsXY = [];
     emptyChar();
   };
+
+  function removeSpace() {
+    var newStr = document.getElementById('inputText').value.replace(/\s*/g,"");
+    document.getElementById('inputText').value = newStr;
+  }
 
   function isCanvasBlank(cvs) {
     var blank = document.createElement('canvas');
@@ -255,6 +264,7 @@
       str.slice(0, str.length - 1);
       document.getElementById('inputText').value = str.substr(0, str.length - 1);
     }
+    removeSpace();
     if (e == 1) {
       document.getElementById('inputText').value += candi1.innerText;
     } else if (e == 2) {
