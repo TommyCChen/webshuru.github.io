@@ -33,9 +33,6 @@
     <ul class="ul">
       <li><button id="handle">手动识别</button></li>
       <li><button id="clearCanvas">清空</button></li>
-<!--       <li><button onclick="canvasGreen(1)">画笔变色</button></li>
-      <li><button onclick="canvasGreen(2)">画布变色</button></li>
-      <li><button onclick="canvasGreen(3)">画笔粗细</button></li> -->
     </ul>
     <img src="" alt="" id="Img" />
   </body>
@@ -281,20 +278,20 @@
     emptyChar();
   }
 
-  // 生成图片
+  //
   // createImg1.onclick = function () {
   //   const img = new Image();
-  //   //图片的格式jpeg,图片的质量为0.8
+  //   
   //   img.src = canvas.toDataURL("image/jpeg", 0.8);
   //   img.onload = function () {
   //     console.log("img", img);
-  //     Img.src = img.src; //这个格式是base64 的格式，上传文件需要转Blob格式
+  //     Img.src = img.src;
   //   };
   //   img.onerror = function () {
   //     console.log("图片加载失败");
   //   };
   // };
-  //画笔和画布的变色
+  //
   // function canvasGreen(e) {
   //   console.log(e);
   //   if (e == 1) {
