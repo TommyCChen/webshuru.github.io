@@ -7,6 +7,7 @@
     <title>canvas输入法</title>
     <style>
       .ul {
+        padding: 0px;
         display: flex;
         align-items: center;
         list-style: none;
@@ -14,27 +15,33 @@
       .ul > li {
         margin-right: 10px;
       }
+      .button {
+        background-color: #ffffff;
+        border: 0px;
+      }
     </style>
   </head>
 <!--   <body> -->
   <body style="overflow:hidden">
-    <input id="inputText" type="text" size="30"/><br>
-    <div>
-      <p>候选字：</p>
+    <input id="inputText" type="text" size="30" value="" />
+    <button id="delete" onclick="deleteChar()">退格</button>
+    <button id="clearCanvas">清空</button><br>
+    <div>   
+      <ul class="ul">
+        <!-- <p>候选字：</p>  -->
+        <li><button class="button" id="candi1" onclick="candiClick(1)"></button></li>
+        <li><button class="button" id="candi2" onclick="candiClick(2)"></button></li>
+        <li><button class="button" id="candi3" onclick="candiClick(3)"></button></li>
+        <li><button class="button" id="candi4" onclick="candiClick(4)"></button></li>
+        <li><button class="button" id="candi5" onclick="candiClick(5)"></button></li>
+      </ul>
     </div>
-    <ul class="ul">
-      <li><button id="candi1" onclick="candiClick(1)"></button></li>
-      <li><button id="candi2" onclick="candiClick(2)"></button></li>
-      <li><button id="candi3" onclick="candiClick(3)"></button></li>
-      <li><button id="candi4" onclick="candiClick(4)"></button></li>
-      <li><button id="candi5" onclick="candiClick(5)"></button></li>
-    </ul>
+
     <canvas type="2d" id="myCanvas" width="350" height="350"></canvas>
-    <ul class="ul">
-      <li><button id="handle">手动识别</button></li>
+<!--     <ul class="ul">
       <li><button id="clearCanvas">清空</button></li>
     </ul>
-    <img src="" alt="" id="Img" />
+    <img src="" alt="" id="Img" /> -->
   </body>
 </html>
 <script>
@@ -92,7 +99,7 @@
 
     // console.log("移动------", e);
     ctx.stroke();
-    if (Date.now() % 3 == 0) {
+    if (Date.now() % 6 == 0) {
       point.push("[");
       point.push(e.offsetX);
       point.push(",");
@@ -112,10 +119,20 @@
     canvas.removeEventListener("mousemove", move);
     if (isAagain) {
       // document.getElementById('inputText').value += "好";
+      point.push("[");
+      point.push(e.offsetX);
+      point.push(",");
+      point.push(e.offsetY);
+      point.push("]");
+      pointsXY.push(point.join(''));
+      point = [];
       pointsXY.push('[-1,0]');
       allPointsXY.push(pointsXY.join(','));
       pointsXY = [];
       console.table(allPointsXY);
+      let result = [];
+      result.push(allPointsXY.join(','))
+      console.table(result);
       queryChar();
     }
     isAagain = false;
@@ -159,7 +176,7 @@
 
     // console.log("移动------", e);
     ctx.stroke();
-    if (Date.now() % 3 == 0) {
+    if (Date.now() % 6 == 0) {
       point.push("[");
       point.push(e2.pageX - vertex.left);
       point.push(",");
@@ -177,6 +194,13 @@
     canvas.removeEventListener("touchmove", touchmove);
     if (isAagain) {
       // document.getElementById('inputText').value += "好";
+      point.push("[");
+      point.push(e2.pageX - vertex.left);
+      point.push(",");
+      point.push(e2.pageY - vertex.top);
+      point.push("]");
+      pointsXY.push(point.join(''));
+      point = [];
       pointsXY.push('[-1,0]');
       allPointsXY.push(pointsXY.join(','));
       pointsXY = [];
@@ -276,6 +300,15 @@
     ctx.fillRect(0, 0, 350, 350);    
     allPointsXY = [];
     emptyChar();
+  }
+
+  function deleteChar() {
+    removeSpace();
+    var oriStr = document.getElementById('inputText').value;
+    if (oriStr.length > 0) {
+      oriStr = oriStr.substr(0, oriStr.length - 1);
+      document.getElementById('inputText').value = oriStr;
+    }
   }
 
   //
