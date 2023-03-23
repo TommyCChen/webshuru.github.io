@@ -194,13 +194,13 @@
   canvas.addEventListener("touchend", touchend);
 
   function touchend(e) {
-    point.push("[");
-    point.push(e2.pageX - vertex.left);
-    point.push(",");
-    point.push(e2.pageY - vertex.top);
-    point.push("]");
-    pointsXY.push(point.join(''));
-    point = [];
+//     point.push("[");
+//     point.push(e2.pageX - vertex.left);
+//     point.push(",");
+//     point.push(e2.pageY - vertex.top);
+//     point.push("]");
+//     pointsXY.push(point.join(''));
+//     point = [];
     canvas.removeEventListener("touchmove", touchmove);
     if (isAagain) {
       // document.getElementById('inputText').value += "好";
