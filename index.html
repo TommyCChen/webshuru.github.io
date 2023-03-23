@@ -18,6 +18,7 @@
       .button {
         background-color: #ffffff;
         border: 1px;
+        font-size: 16px;
       }
     </style>
   </head>
@@ -118,16 +119,16 @@
   canvas.addEventListener("mouseout", up);
 
   function up(e) {
+    point.push("[");
+    point.push(e.offsetX);
+    point.push(",");
+    point.push(e.offsetY);
+    point.push("]");
+    pointsXY.push(point.join(''));
+    point = [];
     canvas.removeEventListener("mousemove", move);
     if (isAagain) {
       // document.getElementById('inputText').value += "好";
-      point.push("[");
-      point.push(e.offsetX);
-      point.push(",");
-      point.push(e.offsetY);
-      point.push("]");
-      pointsXY.push(point.join(''));
-      point = [];
       pointsXY.push('[-1,0]');
       allPointsXY.push(pointsXY.join(','));
       pointsXY = [];
@@ -193,16 +194,16 @@
   canvas.addEventListener("touchend", touchend);
 
   function touchend(e) {
+    point.push("[");
+    point.push(e2.pageX - vertex.left);
+    point.push(",");
+    point.push(e2.pageY - vertex.top);
+    point.push("]");
+    pointsXY.push(point.join(''));
+    point = [];
     canvas.removeEventListener("touchmove", touchmove);
     if (isAagain) {
       // document.getElementById('inputText').value += "好";
-      point.push("[");
-      point.push(e2.pageX - vertex.left);
-      point.push(",");
-      point.push(e2.pageY - vertex.top);
-      point.push("]");
-      pointsXY.push(point.join(''));
-      point = [];
       pointsXY.push('[-1,0]');
       allPointsXY.push(pointsXY.join(','));
       pointsXY = [];
@@ -306,6 +307,7 @@
 
   function deleteChar() {
     removeSpace();
+    emptyChar();
     var oriStr = document.getElementById('inputText').value;
     if (oriStr.length > 0) {
       oriStr = oriStr.substr(0, oriStr.length - 1);
