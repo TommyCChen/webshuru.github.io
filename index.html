@@ -17,15 +17,17 @@
       }
       .button {
         background-color: #ffffff;
-        border: 0px;
+        border: 1px;
       }
     </style>
   </head>
 <!--   <body> -->
   <body style="overflow:hidden">
-    <input id="inputText" type="text" size="30" value="" />
-    <button id="delete" onclick="deleteChar()">退格</button>
-    <button id="clearCanvas">清空</button><br>
+    <div>
+      <input id="inputText" type="text" size="30" value="" />
+      <button id="delete" onclick="deleteChar()">退格</button>
+      <button id="clearCanvas">清空</button><br>
+    </div>
     <div>   
       <ul class="ul">
         <!-- <p>候选字：</p>  -->
@@ -40,8 +42,8 @@
     <canvas type="2d" id="myCanvas" width="350" height="350"></canvas>
 <!--     <ul class="ul">
       <li><button id="clearCanvas">清空</button></li>
-    </ul>
-    <img src="" alt="" id="Img" /> -->
+    </ul> -->
+    <img src="" alt="" id="Img" />
   </body>
 </html>
 <script>
@@ -194,13 +196,13 @@
     canvas.removeEventListener("touchmove", touchmove);
     if (isAagain) {
       // document.getElementById('inputText').value += "好";
-      point.push("[");
-      point.push(e2.pageX - vertex.left);
-      point.push(",");
-      point.push(e2.pageY - vertex.top);
-      point.push("]");
-      pointsXY.push(point.join(''));
-      point = [];
+      // point.push("[");
+      // point.push(e2.pageX - vertex.left);
+      // point.push(",");
+      // point.push(e2.pageY - vertex.top);
+      // point.push("]");
+      // pointsXY.push(point.join(''));
+      // point = [];
       pointsXY.push('[-1,0]');
       allPointsXY.push(pointsXY.join(','));
       pointsXY = [];
