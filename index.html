@@ -25,7 +25,7 @@
 <!--   <body> -->
   <body style="overflow:hidden">
     <div>
-      <input id="inputText" type="text" size="30" value="" />
+      <input id="inputText" type="text" size="26" value="" />
       <button id="delete" onclick="deleteChar()">退格</button>
       <button id="clearCanvas">清空</button><br>
     </div>
@@ -134,9 +134,11 @@
       pointsXY = [];
       console.table(allPointsXY);
       let result = [];
+      result.push("[")
       result.push(allPointsXY.join(','))
-      console.table(result);
-      queryChar();
+      result.push("]")
+      console.table(result.join('').toString());
+      queryChar(result.join('').toString());
     }
     isAagain = false;
     timeout = window.setTimeout (function() {
@@ -194,13 +196,13 @@
   canvas.addEventListener("touchend", touchend);
 
   function touchend(e) {
-//     point.push("[");
-//     point.push(e2.pageX - vertex.left);
-//     point.push(",");
-//     point.push(e2.pageY - vertex.top);
-//     point.push("]");
-//     pointsXY.push(point.join(''));
-//     point = [];
+    point.push("[");
+    point.push(e2.pageX - vertex.left);
+    point.push(",");
+    point.push(e2.pageY - vertex.top);
+    point.push("]");
+    pointsXY.push(point.join(''));
+    point = [];
     canvas.removeEventListener("touchmove", touchmove);
     if (isAagain) {
       // document.getElementById('inputText').value += "好";
@@ -208,7 +210,12 @@
       allPointsXY.push(pointsXY.join(','));
       pointsXY = [];
       console.table(allPointsXY);
-      queryChar();
+      let result = [];
+      result.push("[")
+      result.push(allPointsXY.join(','))
+      result.push("]")
+      console.table(result.join('').toString());
+      queryChar(result.join('').toString());
     }
     isAagain = false;
     timeout = window.setTimeout (function() {
@@ -221,18 +228,6 @@
       
     }, 800);
   }
-  //当鼠标移出canvas画布之外，也停止监听，否则会有bug,不行的话，可以把这个方法注释试一试
-  // canvas.addEventListener("mouseout", function () {
-  //   canvas.removeEventListener("mousemove", move);
-  //   if (isAagain) {
-  //     document.getElementById('inputText').value += "好";
-  //     pointsXY.push('[-1,0]');
-  //     allPointsXY.push(pointsXY.join(','));
-  //     pointsXY = [];
-  //     console.table(allPointsXY);
-  //   }
-  //   isAagain = false;
-  // });
 
   // 清除画布
   clearCanvas.onclick = function () {
@@ -260,7 +255,7 @@
     return cvs.toDataURL() == blank.toDataURL();
   }
 
-  function queryChar() {
+  function queryChar(charString) {
     candi1.innerHTML = '测';
     candi2.innerHTML = '试';
     candi3.innerHTML = '结';
